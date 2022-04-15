@@ -47,5 +47,10 @@ namespace cineweb_user_api.Repositories
         {
             return _userContext.Users.ToList();
         }
+
+        public User FindByPassword(string password)
+        {
+            return _userContext.Users.Where(x => x.Password == password).FirstOrDefault();
+        }
     }
 }

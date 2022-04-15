@@ -18,5 +18,6 @@ namespace cineweb_user_api.Repositories
         List<T> FindAll();
         
         T FindByEmail(string email);
+        T FindByPassword(string password);
     }
 }

@@ -3,6 +3,7 @@ using cineweb_user_api.Context;
 using cineweb_user_api.DTO;
 using cineweb_user_api.Models;
 using cineweb_user_api.Repositories;
+using cineweb_user_api.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -43,9 +44,10 @@ namespace cineweb_user_api
 
             services.AddDbContext<UserContext, UserContext>(options =>
             {
-                options.UseMySQL(Configuration.GetConnectionString(""));
+                options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddScoped<ICriptography, Criptography>();
             services.AddScoped<IBaseRepository<User>, UserRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>

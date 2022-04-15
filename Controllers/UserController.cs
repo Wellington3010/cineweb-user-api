@@ -2,10 +2,12 @@
 using cineweb_user_api.DTO;
 using cineweb_user_api.Models;
 using cineweb_user_api.Repositories;
+using cineweb_user_api.Util;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace cineweb_user_api.Controllers
@@ -16,17 +18,43 @@ namespace cineweb_user_api.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IBaseRepository<User> _userRepository;
-        public UserController(IMapper mapper, IBaseRepository<User> userRepository)
+        private readonly ICriptography _criptography;
+        public UserController(IMapper mapper, IBaseRepository<User> userRepository, ICriptography criptography)
         {
             _mapper = mapper;
             _userRepository = userRepository;
+            _criptography = criptography;
         }
 
         [HttpGet]
         [Route("login")]
-        public ActionResult Login(string login)
+        public ActionResult Login(string email, string password)
         {
-            return Json("");
+            var userLogin = _criptography.Encrypt($"{email}:{password}");
+
+            var user = _userRepository.FindByPassword(userLogin);
+
+            if (user == null)
+                return BadRequest();
+
+            return Json($"{Guid.NewGuid()}:{DateTime.Now}:{user.Name}");
+        }
+
+        [HttpGet]
+        [Route("register")]
+        public ActionResult Register(string name, string email, string password)
+        {
+            var newUser = new User();
+            newUser.Id = Guid.NewGuid();
+            newUser.Email = email;
+            newUser.Name = name;
+            newUser.Password = _criptography.Encrypt($"{email}:{password}");
+            newUser.RegisterDate = DateTime.Now;
+            newUser.UpdatedDate = DateTime.Now;
+
+            _userRepository.Save(newUser);
+
+            return Json($"{Guid.NewGuid()}:{DateTime.Now}:{name}");
         }
 
         [HttpGet]
