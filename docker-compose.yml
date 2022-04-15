@@ -1,7 +1,7 @@
 version: "2.2"
 
 services:
- cineweb_movies_api:
+ cineweb_user_api:
   container_name: cineweb_user_api
   image: cineweb_user_api
   environment:
