@@ -11,6 +11,7 @@ namespace cineweb_user_api.Repositories
     public class UserRepository : IBaseRepository<User>
     {
         private readonly UserContext _userContext;
+        
         public UserRepository(UserContext userContext)
         {
             _userContext = userContext;
