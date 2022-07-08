@@ -26,7 +26,7 @@ namespace cineweb_user_api.Controllers
             _criptography = criptography;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("login")]
         public ActionResult Login(string email, string password)
         {
@@ -40,7 +40,7 @@ namespace cineweb_user_api.Controllers
             return Json($"{Guid.NewGuid()}:{DateTime.Now}:{user.Name}");
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("register")]
         public ActionResult Register(string name, string email, string password)
         {
