@@ -73,7 +73,7 @@ namespace cineweb_user_api
 
             app.UseAuthorization();
 
-            app.useCors(c => c.AllowAnyOrigin());
+            app.UseCors(c => c.AllowAnyOrigin());
 
             app.UseEndpoints(endpoints =>
             {
