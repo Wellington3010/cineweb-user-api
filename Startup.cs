@@ -49,9 +49,13 @@ namespace cineweb_user_api
                     });
             });
 
+             services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.WriteIndented = false;
+            });
+
             services.AddScoped<ICriptography, Criptography>();
             services.AddScoped<IBaseRepository<User>, UserRepository>();
-            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "cineweb_user_api", Version = "v1" });

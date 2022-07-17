@@ -15,6 +15,7 @@ namespace cineweb_user_api.Controllers
 {
     [Route("users")]
     [ApiController]
+    [Produces("application/json")]
     public class UserController : Controller
     {
         private readonly IMapper _mapper;
@@ -29,7 +30,7 @@ namespace cineweb_user_api.Controllers
 
         [HttpPost]
         [Route("login")]
-        public ActionResult Login(UserLoginDTO userDTO)
+        public ActionResult Login([FromBody] UserLoginDTO userDTO)
         {
             var userLogin = _criptography.Encrypt($"{userDTO.email}:{userDTO.password}");
 
