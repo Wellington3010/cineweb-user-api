@@ -3,6 +3,7 @@ using cineweb_user_api.DTO;
 using cineweb_user_api.Models;
 using cineweb_user_api.Repositories;
 using cineweb_user_api.Util;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -28,9 +29,9 @@ namespace cineweb_user_api.Controllers
 
         [HttpPost]
         [Route("login")]
-        public ActionResult Login(string email, string password)
+        public ActionResult Login(UserLoginDTO userDTO)
         {
-            var userLogin = _criptography.Encrypt($"{email}:{password}");
+            var userLogin = _criptography.Encrypt($"{userDTO.email}:{userDTO.password}");
 
             var user = _userRepository.FindByPassword(userLogin);
 

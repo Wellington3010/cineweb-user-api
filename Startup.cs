@@ -6,18 +6,11 @@ using cineweb_user_api.Repositories;
 using cineweb_user_api.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cineweb_user_api
 {
@@ -47,6 +40,15 @@ namespace cineweb_user_api
                 options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllowOrigin",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin();
+                    });
+            });
+
             services.AddScoped<ICriptography, Criptography>();
             services.AddScoped<IBaseRepository<User>, UserRepository>();
             services.AddControllers();
@@ -73,7 +75,7 @@ namespace cineweb_user_api
 
             app.UseAuthorization();
 
-            app.UseCors(c => c.AllowAnyOrigin());
+            app.UseCors("AllowOrigin");
 
             app.UseEndpoints(endpoints =>
             {
