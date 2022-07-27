@@ -30,33 +30,33 @@ namespace cineweb_user_api.Controllers
 
         [HttpPost]
         [Route("login")]
-        public ActionResult Login([FromBody] UserLoginDTO userDTO)
+        public ActionResult Login([FromBody] UserLoginDTO userLoginRequest)
         {
-            var userLogin = _criptography.Encrypt($"{userDTO.email}:{userDTO.password}");
+            var userLogin = _criptography.Encrypt($"{userLoginRequest.email}:{userLoginRequest.password}");
 
             var user = _userRepository.FindByPassword(userLogin);
 
             if (user == null)
                 return BadRequest();
 
-            return Json($"{Guid.NewGuid()}:{DateTime.Now}:{user.Name}");
+            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{user.Name}");
         }
 
         [HttpPost]
         [Route("register")]
-        public ActionResult Register(string name, string email, string password)
+        public ActionResult Register([FromBody] UserRegisterDTO userRegisterRequest)
         {
             var newUser = new User();
             newUser.Id = Guid.NewGuid();
-            newUser.Email = email;
-            newUser.Name = name;
-            newUser.Password = _criptography.Encrypt($"{email}:{password}");
+            newUser.Email = userRegisterRequest.email;
+            newUser.Name = userRegisterRequest.name;
+            newUser.Password = _criptography.Encrypt($"{userRegisterRequest.email}:{userRegisterRequest.password}");
             newUser.RegisterDate = DateTime.Now;
             newUser.UpdatedDate = DateTime.Now;
 
             _userRepository.Save(newUser);
 
-            return Json($"{Guid.NewGuid()}:{DateTime.Now}:{name}");
+            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{userRegisterRequest.name}");
         }
 
         [HttpGet]
