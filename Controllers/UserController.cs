@@ -46,7 +46,6 @@ namespace cineweb_user_api.Controllers
         [Route("register")]
         public ActionResult Register([FromBody] UserRegisterDTO userRegisterRequest)
         {
-            
             var newUser = new User();
             newUser.Id = Guid.NewGuid();
             newUser.Email = userRegisterRequest.email;
