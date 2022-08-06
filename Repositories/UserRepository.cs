@@ -31,53 +31,103 @@ namespace cineweb_user_api.Repositories
 
         public UserRegisterDTO FindById(Guid Id)
         {
-            return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Id == Id).FirstOrDefault());
+            try
+            {
+                return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Id == Id).FirstOrDefault());
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception(ex);
+            }
         }
 
         public UserRegisterDTO FindByEmail(string email)
         {
-            return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Email == email).FirstOrDefault());           
+            try
+            {
+                return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Email == email).FirstOrDefault());           
+            }
+            catch (System.Exception)
+            {
+                throw new Exception(ex);
+            }
         }
 
         public void Save(UserRegisterDTO entity)
         {
-            var user = _mapper.Map<User>(entity);
-            user.Id = Guid.NewGuid();
-            user.RegisterDate = DateTime.Now;
-            user.UpdatedDate = user.RegisterDate;
-            user.Password = _criptography.Encrypt($"{user.Email}:{user.Password}");
-            _userContext.Users.Add(user);
-            _userContext.SaveChanges();
+            try
+            {
+                var user = _mapper.Map<User>(entity);
+                user.Id = Guid.NewGuid();
+                user.RegisterDate = DateTime.Now;
+                user.UpdatedDate = user.RegisterDate;
+                user.Password = _criptography.Encrypt($"{user.Email}:{user.Password}");
+                _userContext.Users.Add(user);
+                _userContext.SaveChanges();
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception(ex);
+            }
         }
 
         public void Update(UserRegisterDTO entity)
         {
-            var newUser = _mapper.Map<User>(entity);
-            var oldUser = _userContext.Users.Where(x => x.Email == newUser.Email).FirstOrDefault();
-            oldUser.Name = newUser.Name;
-            oldUser.Password = _criptography.Encrypt($"{newUser.Email}:{newUser.Password}");
-            oldUser.UpdatedDate = DateTime.Now;
-            _userContext.Entry<User>(oldUser).State = EntityState.Modified;
-            _userContext.SaveChanges();
-;       }
+            try
+            {
+                var newUser = _mapper.Map<User>(entity);
+                var oldUser = _userContext.Users.Where(x => x.Email == newUser.Email).FirstOrDefault();
+                oldUser.Name = newUser.Name;
+                oldUser.Password = _criptography.Encrypt($"{newUser.Email}:{newUser.Password}");
+                oldUser.UpdatedDate = DateTime.Now;
+                _userContext.Entry<User>(oldUser).State = EntityState.Modified;
+                _userContext.SaveChanges();
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception(ex);
+            }
+        }
 
         public List<UserRegisterDTO> FindAll()
         {
-            List<UserRegisterDTO> list = new List<UserRegisterDTO>();
-            _userContext.Users.ToList().ForEach(x => list.Add(_mapper.Map<UserRegisterDTO>(x)));
-            return list;
+            try
+            {
+                List<UserRegisterDTO> list = new List<UserRegisterDTO>();
+                _userContext.Users.ToList().ForEach(x => list.Add(_mapper.Map<UserRegisterDTO>(x)));
+                return list;
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception(ex);
+            }
         }
 
         public UserRegisterDTO FindByPassword(string password)
         {
-            return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Password == password).FirstOrDefault());
+            try
+            {
+                return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Password == password).FirstOrDefault());
+
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception(ex);
+            }
         }
 
         public void Delete(string email)
         {
-            var userToRemove = _userContext.Users.Where(x => x.Email == email);
-            _userContext.Remove(userToRemove);
-            _userContext.SaveChanges();
+            try
+            {
+                var userToRemove = _userContext.Users.Where(x => x.Email == email);
+                _userContext.Remove(userToRemove);
+                _userContext.SaveChanges();
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception(ex);
+            }
         }
     }
 }
