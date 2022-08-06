@@ -11,7 +11,7 @@ namespace cineweb_user_api.Repositories
 
         void Update(T entity);
 
-        void Delete(T entity);
+        void Delete(string email);
 
         T FindById(Guid Id);
 

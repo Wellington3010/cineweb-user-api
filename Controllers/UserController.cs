@@ -18,12 +18,10 @@ namespace cineweb_user_api.Controllers
     [Produces("application/json")]
     public class UserController : Controller
     {
-        private readonly IMapper _mapper;
-        private readonly IBaseRepository<User> _userRepository;
+        private readonly IBaseRepository<UserRegisterDTO> _userRepository;
         private readonly ICriptography _criptography;
-        public UserController(IMapper mapper, IBaseRepository<User> userRepository, ICriptography criptography)
+        public UserController(IMapper mapper, IBaseRepository<UserRegisterDTO> userRepository, ICriptography criptography)
         {
-            _mapper = mapper;
             _userRepository = userRepository;
             _criptography = criptography;
         }
@@ -46,17 +44,9 @@ namespace cineweb_user_api.Controllers
         [Route("register")]
         public ActionResult Register([FromBody] UserRegisterDTO userRegisterRequest)
         {
-            var newUser = new User();
-            newUser.Id = Guid.NewGuid();
-            newUser.Email = userRegisterRequest.email;
-            newUser.Name = userRegisterRequest.name;
-            newUser.Password = _criptography.Encrypt($"{userRegisterRequest.email}:{userRegisterRequest.password}");
-            newUser.RegisterDate = DateTime.Now;
-            newUser.UpdatedDate = DateTime.Now;
+            _userRepository.Save(userRegisterRequest);
 
-            _userRepository.Save(newUser);
-
-            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{userRegisterRequest.name}");
+            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{userRegisterRequest.Name}");
         }
 
         [HttpGet]
@@ -69,12 +59,9 @@ namespace cineweb_user_api.Controllers
 
         [HttpPost]
         [Route("admin/save")]
-        public ActionResult Save(AdminUserDTO userDTO)
+        public ActionResult Save(UserRegisterDTO userDTO)
         {
-            var user = _mapper.Map<User>(userDTO);
-            user.UpdatedDate = DateTime.Now;
-            user.RegisterDate = DateTime.Now;
-            _userRepository.Save(user);
+            _userRepository.Save(userDTO);
 
             return Ok();
         }
@@ -82,21 +69,18 @@ namespace cineweb_user_api.Controllers
 
         [HttpPost]
         [Route("admin/update")]
-        public ActionResult Update(AdminUserDTO userDTO)
+        public ActionResult Update(UserRegisterDTO userDTO)
         {
-            var user = _mapper.Map<User>(userDTO);
-            user.UpdatedDate = DateTime.Now;
-            _userRepository.Update(user);
+            _userRepository.Update(userDTO);
 
             return Ok();
         }
 
         [HttpDelete]
         [Route("admin/delete")]
-        public ActionResult Delete(Guid id)
+        public ActionResult Delete(string email)
         {
-            var user = _userRepository.FindById(id);
-            _userRepository.Delete(user);
+            _userRepository.Delete(email);
             return Ok();
         }
     }

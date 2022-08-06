@@ -1,5 +1,8 @@
-﻿using cineweb_user_api.Context;
+﻿using AutoMapper;
+using cineweb_user_api.Context;
+using cineweb_user_api.DTO;
 using cineweb_user_api.Models;
+using cineweb_user_api.Util;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,13 +11,17 @@ using System.Threading.Tasks;
 
 namespace cineweb_user_api.Repositories
 {
-    public class UserRepository : IBaseRepository<User>
+    public class UserRepository : IBaseRepository<UserRegisterDTO>
     {
         private readonly UserContext _userContext;
-        
-        public UserRepository(UserContext userContext)
+        private readonly IMapper _mapper;
+        private readonly ICriptography _criptography;
+
+        public UserRepository(UserContext userContext, IMapper mapper, ICriptography criptography)
         {
             _userContext = userContext;
+            _mapper = mapper;
+            _criptography = criptography;
         }
         public void Delete(User entity)
         {
@@ -22,36 +29,55 @@ namespace cineweb_user_api.Repositories
             _userContext.SaveChanges();
         }
 
-        public User FindById(Guid Id)
+        public UserRegisterDTO FindById(Guid Id)
         {
-            return _userContext.Users.Where(x => x.Id == Id).FirstOrDefault();
+            return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Id == Id).FirstOrDefault());
         }
 
-        public User FindByEmail(string email)
+        public UserRegisterDTO FindByEmail(string email)
         {
-            return _userContext.Users.Where(x => x.Email == email).FirstOrDefault();           
+            return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Email == email).FirstOrDefault());           
         }
 
-        public void Save(User entity)
+        public void Save(UserRegisterDTO entity)
         {
-            _userContext.Users.Add(entity);
+            var user = _mapper.Map<User>(entity);
+            user.Id = Guid.NewGuid();
+            user.RegisterDate = DateTime.Now;
+            user.UpdatedDate = user.RegisterDate;
+            user.Password = _criptography.Encrypt($"{user.Email}:{user.Password}");
+            _userContext.Users.Add(user);
             _userContext.SaveChanges();
         }
 
-        public void Update(User entity)
+        public void Update(UserRegisterDTO entity)
         {
-            _userContext.Entry<User>(entity).State = EntityState.Modified;
+            var newUser = _mapper.Map<User>(entity);
+            var oldUser = _userContext.Users.Where(x => x.Email == newUser.Email).FirstOrDefault();
+            oldUser.Name = newUser.Name;
+            oldUser.Password = _criptography.Encrypt($"{newUser.Email}:{newUser.Password}");
+            oldUser.UpdatedDate = DateTime.Now;
+            _userContext.Entry<User>(oldUser).State = EntityState.Modified;
             _userContext.SaveChanges();
-;        }
+;       }
 
-        public List<User> FindAll()
+        public List<UserRegisterDTO> FindAll()
         {
-            return _userContext.Users.ToList();
+            List<UserRegisterDTO> list = new List<UserRegisterDTO>();
+            _userContext.Users.ToList().ForEach(x => list.Add(_mapper.Map<UserRegisterDTO>(x)));
+            return list;
         }
 
-        public User FindByPassword(string password)
+        public UserRegisterDTO FindByPassword(string password)
         {
-            return _userContext.Users.Where(x => x.Password == password).FirstOrDefault();
+            return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Password == password).FirstOrDefault());
+        }
+
+        public void Delete(string email)
+        {
+            var userToRemove = _userContext.Users.Where(x => x.Email == email);
+            _userContext.Remove(userToRemove);
+            _userContext.SaveChanges();
         }
     }
 }

@@ -29,7 +29,8 @@ namespace cineweb_user_api
 
             var configuration = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<AdminUserDTO, User>().ReverseMap();
+                cfg.CreateMap<UserLoginDTO, User>().ReverseMap();
+                cfg.CreateMap<UserRegisterDTO, User>().ReverseMap();
             });
 
             IMapper mapper = configuration.CreateMapper();
@@ -40,13 +41,12 @@ namespace cineweb_user_api
                 options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy(name: "AllowOrigin",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin();
-                    });
+            services.AddCors(setup => {
+                    setup.AddPolicy("CorsPolicy", builder => {
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyOrigin();
+                });
             });
 
              services.AddControllers().AddJsonOptions(options =>
@@ -55,7 +55,7 @@ namespace cineweb_user_api
             });
 
             services.AddScoped<ICriptography, Criptography>();
-            services.AddScoped<IBaseRepository<User>, UserRepository>();
+            services.AddScoped<IBaseRepository<UserRegisterDTO>, UserRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "cineweb_user_api", Version = "v1" });
@@ -79,7 +79,7 @@ namespace cineweb_user_api
 
             app.UseAuthorization();
 
-            app.UseCors("AllowOrigin");
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
