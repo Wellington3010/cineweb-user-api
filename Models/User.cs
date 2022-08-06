@@ -28,5 +28,8 @@ namespace cineweb_user_api.Models
 
         [Required]
         public DateTime UpdatedDate { get; set; }
+        
+        [Required]
+        public bool AdminUser { get; set; } 
     }
 }

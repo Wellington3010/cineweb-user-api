@@ -35,9 +35,9 @@ namespace cineweb_user_api.Repositories
             {
                 return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Id == Id).FirstOrDefault());
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception(ex);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -47,9 +47,9 @@ namespace cineweb_user_api.Repositories
             {
                 return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Email == email).FirstOrDefault());           
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
-                throw new Exception(ex);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -65,9 +65,9 @@ namespace cineweb_user_api.Repositories
                 _userContext.Users.Add(user);
                 _userContext.SaveChanges();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception(ex);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -83,9 +83,9 @@ namespace cineweb_user_api.Repositories
                 _userContext.Entry<User>(oldUser).State = EntityState.Modified;
                 _userContext.SaveChanges();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception(ex);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -97,9 +97,9 @@ namespace cineweb_user_api.Repositories
                 _userContext.Users.ToList().ForEach(x => list.Add(_mapper.Map<UserRegisterDTO>(x)));
                 return list;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception(ex);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -110,9 +110,9 @@ namespace cineweb_user_api.Repositories
                 return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Password == password).FirstOrDefault());
 
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception(ex);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -124,9 +124,9 @@ namespace cineweb_user_api.Repositories
                 _userContext.Remove(userToRemove);
                 _userContext.SaveChanges();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception(ex);
+                throw new Exception(ex.Message);
             }
         }
     }
