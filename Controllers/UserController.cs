@@ -37,7 +37,7 @@ namespace cineweb_user_api.Controllers
             if (user == null)
                 return BadRequest();
 
-            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{user.Name}");
+            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{user.Name}_{user.AdminUser}");
         }
 
         [HttpPost]
@@ -46,7 +46,7 @@ namespace cineweb_user_api.Controllers
         {
             _userRepository.Save(userRegisterRequest);
 
-            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{userRegisterRequest.Name}");
+            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{userRegisterRequest.Name}_{false}");
         }
 
         [HttpGet]
