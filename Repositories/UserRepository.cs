@@ -23,7 +23,7 @@ namespace cineweb_user_api.Repositories
             _mapper = mapper;
             _criptography = criptography;
         }
-        public void Delete(User entity)
+        public void Delete(Usuario entity)
         {
             _userContext.Remove(entity);
             _userContext.SaveChanges();
@@ -57,11 +57,11 @@ namespace cineweb_user_api.Repositories
         {
             try
             {
-                var user = _mapper.Map<User>(entity);
+                var user = _mapper.Map<Usuario>(entity);
                 user.Id = Guid.NewGuid();
                 user.RegisterDate = DateTime.Now;
                 user.UpdatedDate = user.RegisterDate;
-                user.Password = _criptography.Encrypt($"{user.Email}:{user.Password}");
+                user.Senha = _criptography.Encrypt($"{user.Email}:{user.Senha}");
                 _userContext.Users.Add(user);
                 _userContext.SaveChanges();
             }
@@ -75,12 +75,13 @@ namespace cineweb_user_api.Repositories
         {
             try
             {
-                var newUser = _mapper.Map<User>(entity);
+                var newUser = _mapper.Map<Usuario>(entity);
                 var oldUser = _userContext.Users.Where(x => x.Email == newUser.Email).FirstOrDefault();
-                oldUser.Name = newUser.Name;
-                oldUser.Password = _criptography.Encrypt($"{newUser.Email}:{newUser.Password}");
+                oldUser.Nome = newUser.Nome;
+                oldUser.CPF = newUser.CPF;
+                oldUser.Senha = _criptography.Encrypt($"{newUser.Email}:{newUser.Senha}");
                 oldUser.UpdatedDate = DateTime.Now;
-                _userContext.Entry<User>(oldUser).State = EntityState.Modified;
+                _userContext.Entry<Usuario>(oldUser).State = EntityState.Modified;
                 _userContext.SaveChanges();
             }
             catch (Exception ex)
@@ -107,7 +108,7 @@ namespace cineweb_user_api.Repositories
         {
             try
             {
-                return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Password == password).FirstOrDefault());
+                return _mapper.Map<UserRegisterDTO>(_userContext.Users.Where(x => x.Senha == password).FirstOrDefault());
 
             }
             catch (Exception ex)

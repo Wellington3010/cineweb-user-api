@@ -29,8 +29,8 @@ namespace cineweb_user_api
 
             var configuration = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<UserLoginDTO, User>().ReverseMap();
-                cfg.CreateMap<UserRegisterDTO, User>().ReverseMap();
+                cfg.CreateMap<UserLoginDTO, Usuario>().ReverseMap();
+                cfg.CreateMap<UserRegisterDTO, Usuario>().ReverseMap();
             });
 
             IMapper mapper = configuration.CreateMapper();

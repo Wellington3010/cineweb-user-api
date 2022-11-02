@@ -30,14 +30,14 @@ namespace cineweb_user_api.Controllers
         [Route("login")]
         public ActionResult Login([FromBody] UserLoginDTO userLoginRequest)
         {
-            var userLogin = _criptography.Encrypt($"{userLoginRequest.email}:{userLoginRequest.password}");
+            var userLogin = _criptography.Encrypt($"{userLoginRequest.Email}:{userLoginRequest.Senha}");
 
             var user = _userRepository.FindByPassword(userLogin);
 
             if (user == null)
                 return BadRequest();
 
-            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{user.Name}_{user.AdminUser}");
+            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{user.Nome}_{user.AdminUser}");
         }
 
         [HttpPost]
@@ -46,7 +46,7 @@ namespace cineweb_user_api.Controllers
         {
             _userRepository.Save(userRegisterRequest);
 
-            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{userRegisterRequest.Name}_{false}");
+            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{userRegisterRequest.Nome}_{false}");
         }
 
         [HttpGet]

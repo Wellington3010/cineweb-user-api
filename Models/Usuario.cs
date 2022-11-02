@@ -7,22 +7,25 @@ using System.Threading.Tasks;
 
 namespace cineweb_user_api.Models
 {
-    [Table("user")]
-    public class User
+    [Table("usuario")]
+    public class Usuario
     {
-        public User() { }
+        public Usuario() { }
 
         [Key]
         public Guid Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string Nome { get; set; }
 
         [Required]
         public string Email { get; set; }
 
         [Required]
-        public string Password { get; set; }
+        public string CPF { get; set; }
+
+        [Required]
+        public string Senha { get; set; }
 
         public DateTime RegisterDate { get; set; }
 
