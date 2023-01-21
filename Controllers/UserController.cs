@@ -37,7 +37,7 @@ namespace cineweb_user_api.Controllers
             if (user == null)
                 return BadRequest();
 
-            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{user.Nome}_{user.AdminUser}");
+            return Json($"{Guid.NewGuid()}_{DateTime.Now}_{user.Nome}_{user.AdminUser}_{user.CPF}");
         }
 
         [HttpPost]
