@@ -18,7 +18,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-RUN useradd -u 2737 well
-USER well
-
 CMD ASPNETCORE_URLS="http://*:$PORT" dotnet cineweb-user-api.dll
