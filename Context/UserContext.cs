@@ -9,7 +9,6 @@ namespace cineweb_user_api.Context
 {
     public class UserContext : DbContext
     {
-
         public UserContext(DbContextOptions<UserContext> options) : base(options) { }
 
         public DbSet<Usuario> Users { get; set; }
