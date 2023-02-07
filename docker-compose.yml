@@ -3,7 +3,7 @@ version: "2.2"
 services:
  cineweb-user-api:
   container_name: cineweb-user-api
-  image: public.ecr.aws/m7x6b7n4/cineweb-user-api:latest
+  image: public.ecr.aws/m7x6b7n4/cineweb-user-api-v2:latest
   environment:
   - PORT=80
   ports:
