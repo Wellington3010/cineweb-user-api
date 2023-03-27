@@ -36,9 +36,14 @@ namespace cineweb_user_api
             IMapper mapper = configuration.CreateMapper();
             services.AddSingleton(mapper);
 
-            services.AddDbContext<UserContext, UserContext>(options =>
+            services.AddDbContext<UserContext, UserContext>(builder =>
             {
-                options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
+                builder.UseMySQL(Configuration.GetConnectionString("DefaultConnection"),
+                options =>
+                {
+                    options.CommandTimeout(680);
+                    options.EnableRetryOnFailure(5);
+                });
             });
 
             services.AddCors(setup => {
