@@ -50,8 +50,8 @@ namespace cineweb_user_api
                     setup.AddPolicy("CorsPolicy", builder => {
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
-                    builder.AllowAnyOrigin();
-                });
+                    builder.WithOrigins("http://cinew-loadb-1lozq7m1z86x-2085072956.sa-east-1.elb.amazonaws.com/");
+                    });
             });
 
              services.AddControllers().AddJsonOptions(options =>
