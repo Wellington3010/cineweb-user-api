@@ -13,7 +13,8 @@ namespace cineweb_user_api.Models
         public Usuario() { }
 
         [Key]
-        public Guid Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         [Required]
         public string Nome { get; set; }

@@ -29,7 +29,7 @@ namespace cineweb_user_api.Repositories
             _userContext.SaveChanges();
         }
 
-        public UserRegisterDTO FindById(Guid Id)
+        public UserRegisterDTO FindById(int Id)
         {
             try
             {
@@ -58,7 +58,6 @@ namespace cineweb_user_api.Repositories
             try
             {
                 var user = _mapper.Map<Usuario>(entity);
-                user.Id = Guid.NewGuid();
                 user.RegisterDate = DateTime.Now;
                 user.UpdatedDate = user.RegisterDate;
                 user.Senha = _criptography.Encrypt($"{user.Email}:{user.Senha}");

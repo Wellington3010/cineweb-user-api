@@ -13,7 +13,7 @@ namespace cineweb_user_api.Repositories
 
         void Delete(string email);
 
-        T FindById(Guid Id);
+        T FindById(int Id);
 
         List<T> FindAll();
         
